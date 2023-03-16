@@ -1,0 +1,7 @@
+2023-03-07T18:47:23.4804697 401 : [no body]
+2023-03-07T18:49:55.9306709 401 : [no body]
+2023-03-07T18:50:40.8514529 500 : [{"timestamp":"2023-03-07T23:50:40.851+00:00","status":500,"error":"Internal Server Error","message":"Failed to evaluate expression 'isAuthorized()'","path":"/account/1001"}]
+2023-03-07T18:51:55.8166222 500 : [{"timestamp":"2023-03-07T23:51:55.800+00:00","status":500,"error":"Internal Server Error","message":"Failed to evaluate expression 'isAuthorized()'","path":"/account/1001"}]
+2023-03-07T18:52:03.646038 500 : [{"timestamp":"2023-03-07T23:52:03.630+00:00","status":500,"error":"Internal Server Error","message":"Failed to evaluate expression 'isAuthorized()'","path":"/account/1001"}]
+2023-03-07T19:04:59.028064 500 : [{"timestamp":"2023-03-08T00:04:58.996+00:00","status":500,"error":"Internal Server Error","message":"Missing URI template variable 'userId' for method parameter of type int","path":"/account/1001"}]
+2023-03-07T19:16:11.2944158 500 : [{"timestamp":"2023-03-08T00:16:11.278+00:00","status":500,"error":"Internal Server Error","message":"Failed to evaluate expression 'isAuthorized()'","path":"/account/1001"}]
