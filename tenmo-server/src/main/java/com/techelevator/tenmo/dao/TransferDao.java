@@ -13,4 +13,6 @@ public interface TransferDao {
 
     public Transfer sendMoney(Transfer newTransfer);
 
+    public Transfer requestMoney(Transfer newTransfer);
+
 }
