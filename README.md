@@ -19,7 +19,7 @@ I am currently working on additional functionalities for practice and refactorin
     * If the transfer is approved, the requestee's account balance is decreased by the amount of the request.
     * If the transfer is rejected, no account balance changes.
 
-## Use cases (Up-to-date)
+## Use cases & Requirements (Up-to-date)
 As a user of the system, the user is able to:
 * Register with a username and password.
     * A new registered user starts with an initial balance of 1,000 TE Bucks.
@@ -29,6 +29,13 @@ As a user of the system, the user is able to:
 As an _authenticated_ user of the system, the user is able to: 
 * See Account Balance.
 * **_Send_** a transfer of a specific amount of TE Bucks to a registered user.
+    * Choose from a list of users to send TE bucks to.
+    * Must not be allowed to send money to myself
+    * Can't send a zero/negative amount or more TE bucks that I have in the account
+    * A transfer indlcues the user IDs of the from and to users and the amount of TE bucks
+    * The receiver's account balance is increased by the amount of the transfer.
+    * The server's account balance is decreased by the amount of the transfer.
+    * A Sending Transfer has an initial status of *Approved*
 *  See transfers user has sent or received.
 * Retrieve the details of any transfer based upon the transfer ID.
 
