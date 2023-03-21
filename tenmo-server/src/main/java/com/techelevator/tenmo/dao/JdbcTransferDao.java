@@ -2,6 +2,8 @@ package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
+import org.jboss.logging.BasicLogger;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
@@ -14,7 +16,7 @@ import java.util.List;
 public class JdbcTransferDao implements TransferDao {
 
     private final int TRANSFER_REQUEST = 1;
-    private final int TRANSFER_SENT = 2;
+    private final int TRANSFER_SEND = 2;
     private final int TRANSFER_STATUS_PENDING = 1;
     private final int TRANSFER_STATUS_APPROVED = 2;
     private final int TRANSFER_STATUS_REJECTED = 3;
@@ -58,13 +60,35 @@ public class JdbcTransferDao implements TransferDao {
             String sql = "INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) " +
                     "VALUES (?, ?, ?, ?, ?) RETURNING transfer_id;";
 
-            int newTransferId = jdbcTemplate.queryForObject(sql, int.class, TRANSFER_SENT, TRANSFER_STATUS_APPROVED, newTransfer.getAccountFromId(),
+            int newTransferId = jdbcTemplate.queryForObject(sql, int.class, TRANSFER_SEND, TRANSFER_STATUS_APPROVED, newTransfer.getAccountFromId(),
                                 newTransfer.getAccountToId(), newTransfer.getAmount());
             updatedTransfer = getTransferByTransferId(newTransferId);
 
             updateRecipientAccountBalance(updatedTransfer.getAccountToId(), updatedTransfer.getAmount());
             updateSenderAccountBalance(updatedTransfer.getAccountFromId(), updatedTransfer.getAmount());
         }
+        return updatedTransfer;
+    }
+
+    // updates the transfer table with a new transfer request into and sets the transfer_status to PENDING
+    @Override
+    public Transfer requestMoney(Transfer newTransfer) {
+
+        Transfer updatedTransfer;
+
+        String sql = "INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) " +
+                "VALUES (?, ?, ?, ?, ?) RETURNING transfer_id;";
+
+        int newTransferId = 0;
+        try {
+          newTransferId = jdbcTemplate.queryForObject(sql, int.class, TRANSFER_REQUEST, TRANSFER_STATUS_PENDING,
+                    newTransfer.getAccountFromId(), newTransfer.getAccountToId(), newTransfer.getAmount());
+        } catch (NullPointerException | EmptyResultDataAccessException e) {
+            System.out.println(e.getMessage());
+        }
+
+        updatedTransfer = getTransferByTransferId(newTransferId);
+
         return updatedTransfer;
     }
 

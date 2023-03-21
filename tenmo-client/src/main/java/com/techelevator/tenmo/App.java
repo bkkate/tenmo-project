@@ -162,7 +162,7 @@ public class App {
     //TODO give an exit option to return to main menu
 	private void sendBucks() { // display list of users, prompt for their choice
 
-        int userIdTo = displayUsernameAndReturnInput();
+        int userIdTo = displayUsernameAndReturnInput("Enter the recipient's user ID: ");
         BigDecimal amountToSend = verifySufficientFunds();
 
         int accountFromId = accountService.getAccountByUserId(currentUser.getUser().getId()).getAccountId();
@@ -178,7 +178,32 @@ public class App {
             }
 	}
 
-    private int displayUsernameAndReturnInput() {
+    private void requestBucks() {
+        // displays user list, prompt & record input on userId to send the request to
+        int userIdFrom = displayUsernameAndReturnInput("Enter the user ID that you want to request money from: ");
+
+        // get the request amount that's greater than 0
+        BigDecimal amountToRequest = new BigDecimal("0.00");
+        while (amountToRequest.compareTo(new BigDecimal("0.00")) == 0) {
+            //TODO give an exit option (so they're not forced to make a request)
+            amountToRequest = consoleService.promptForBigDecimal("Please enter the amount to send that's greater than $0.00: ");
+        }
+
+        int accountFromId = accountService.getAccountByUserId(userIdFrom).getAccountId();
+        int accountToId = accountService.getAccountByUserId(currentUser.getUser().getId()).getAccountId();
+
+        Transfer transferInfo = new Transfer(accountFromId, accountToId, amountToRequest);
+        boolean successfulTransfer = transferService.requestMoney(transferInfo);
+        if (successfulTransfer) {
+            System.out.println("Request has been added as pending");
+        }
+        else {
+            System.out.println("Was not able to process the request");
+        }
+    }
+
+    //TODO: move this to ConsoleService; Refactor every method here that uses this method
+    private int displayUsernameAndReturnInput(String displayMsg) {
         int userIdFrom = currentUser.getUser().getId();
         Account accountWithUserId = accountService.getAccountByUserId(userIdFrom);  // accountService: returns list of users
         List<User> users = userService.getAllUsers();
@@ -188,11 +213,11 @@ public class App {
         int userIdTo = userIdFrom;
 
         while (!validInput) {  // prompt for input, and check id response
-            userIdTo = consoleService.promptForInt("Enter the recipient's user ID: ");
+            userIdTo = consoleService.promptForInt(displayMsg);
             if (userIdTo != userIdFrom && (userIdIsValid(users, userIdTo))) {   // lets user out of loop when valid choice is made
                 validInput = true;
             } else {
-                System.out.println("Please choose a User ID from the list that is not your own.");
+                System.out.println("Please choose a User ID from the list that is not your own.\n");
             }
         }
         return userIdTo;
@@ -219,10 +244,7 @@ public class App {
     }
 
 
-	private void requestBucks() {
-		// TODO Auto-generated method stub
-		
-	}
+
 
     private boolean userIdIsValid(List<User> users, int userIdTo) {
         boolean idIsValid = false;

@@ -5,6 +5,7 @@ import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.util.BasicLogger;
 import okhttp3.Response;
 import org.springframework.http.*;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
@@ -34,6 +35,26 @@ public class TransferService {
         if (returnedTransfer != null) {
             success = true;
         }
+        return success;
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    public boolean requestMoney(Transfer transfer) {
+        boolean success = false;
+
+        Transfer returnedTransfer = null;
+        try {
+             returnedTransfer = restTemplate.postForObject(API_BASE_URL + "transfer/request",
+                    makeTransferEntity(transfer), Transfer.class);
+        } catch (ResponseStatusException e){
+            BasicLogger.log(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to complete request");
+        }
+
+        if (returnedTransfer != null) {
+            success = true;
+        }
+
         return success;
     }
 
