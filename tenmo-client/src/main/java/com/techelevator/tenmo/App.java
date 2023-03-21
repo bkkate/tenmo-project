@@ -155,9 +155,37 @@ public class App {
 
 
 	private void viewPendingRequests() {
-		// TODO Auto-generated method stub
+        List<Transfer> pendingTransfers = transferService.viewPendingTransfers(accountWithCurrentUserId.getAccountId());
+        consoleService.printPendingTransfers(pendingTransfers, userService,accountWithCurrentUserId.getAccountId());
+
+        consoleService.printApproveOrReject();
+        int optionSelected = -1;
+        while(optionSelected == -1) {
+            consoleService.promptForInt("Please choose an option: ");
+        }
+
+        switch(optionSelected) {
+            case 0: break;
+            case 1: approve();
+            break;
+            case 2: reject();
+            break;
+        }
+
+        //TODO (3/21): call the approve or reject method
 		
 	}
+
+    //TODO: approve method
+    private void approve() {
+
+    }
+
+    //TODO: reject method
+    private void reject() {
+
+    }
+
 
     //TODO give an exit option to return to main menu
 	private void sendBucks() { // display list of users, prompt for their choice
@@ -165,7 +193,7 @@ public class App {
         int userIdTo = displayUsernameAndReturnInput("Enter the recipient's user ID: ");
         BigDecimal amountToSend = verifySufficientFunds();
 
-        int accountFromId = accountService.getAccountByUserId(currentUser.getUser().getId()).getAccountId();
+        int accountFromId = accountService.getAccountByUserId(userId).getAccountId();
         int accountToId = accountService.getAccountByUserId(userIdTo).getAccountId();
 
         Transfer transferInfo = new Transfer(accountFromId, accountToId, amountToSend); // create transfer object
@@ -190,7 +218,7 @@ public class App {
         }
 
         int accountFromId = accountService.getAccountByUserId(userIdFrom).getAccountId();
-        int accountToId = accountService.getAccountByUserId(currentUser.getUser().getId()).getAccountId();
+        int accountToId = accountService.getAccountByUserId(userId).getAccountId();
 
         Transfer transferInfo = new Transfer(accountFromId, accountToId, amountToRequest);
         boolean successfulTransfer = transferService.requestMoney(transferInfo);
@@ -204,17 +232,16 @@ public class App {
 
     //TODO: move this to ConsoleService; Refactor every method here that uses this method
     private int displayUsernameAndReturnInput(String displayMsg) {
-        int userIdFrom = currentUser.getUser().getId();
-        Account accountWithUserId = accountService.getAccountByUserId(userIdFrom);  // accountService: returns list of users
+        Account accountWithUserId = accountService.getAccountByUserId(userId);  // accountService: returns list of users
         List<User> users = userService.getAllUsers();
         consoleService.printUsers(users);   // consoleService: prints list of registered users
 
         boolean validInput = false;
-        int userIdTo = userIdFrom;
+        int userIdTo = userId;
 
         while (!validInput) {  // prompt for input, and check id response
             userIdTo = consoleService.promptForInt(displayMsg);
-            if (userIdTo != userIdFrom && (userIdIsValid(users, userIdTo))) {   // lets user out of loop when valid choice is made
+            if (userIdTo != userId && (userIdIsValid(users, userIdTo))) {   // lets user out of loop when valid choice is made
                 validInput = true;
             } else {
                 System.out.println("Please choose a User ID from the list that is not your own.\n");

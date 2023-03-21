@@ -15,4 +15,6 @@ public interface TransferDao {
 
     public Transfer requestMoney(Transfer newTransfer);
 
+    public List<Transfer> getPendingTransfers(int accountId);
+
 }

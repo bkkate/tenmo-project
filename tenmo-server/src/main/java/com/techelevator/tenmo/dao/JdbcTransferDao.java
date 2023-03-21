@@ -53,6 +53,20 @@ public class JdbcTransferDao implements TransferDao {
         return transfersOfAccount;
     }
 
+    // pulls a list of pending transfers of a single account
+    @Override
+    public List<Transfer> getPendingTransfers(int accountId) {
+
+        List<Transfer> pendingTransfers = new ArrayList<>();
+        String sql = "SELECT * FROM transfer WHERE account_from= ? AND transfer_status_id= ?;";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, accountId, TRANSFER_STATUS_PENDING);
+
+        while (results.next()) {
+            pendingTransfers.add(mapRowToTransfer(results));
+        }
+        return pendingTransfers;
+    }
+
     public Transfer sendMoney(Transfer newTransfer) {
 
         Transfer updatedTransfer = null;

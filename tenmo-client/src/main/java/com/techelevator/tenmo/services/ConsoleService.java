@@ -50,6 +50,14 @@ public class ConsoleService {
         System.out.println();
     }
 
+    public void printApproveOrReject() {
+        System.out.println();
+        System.out.println("1: Approve");
+        System.out.println("2: Reject");
+        System.out.println("0: Don't approve or reject. Exit");
+        System.out.println("------------");
+    }
+
     public void printUsers(List<User> users) {
 
         System.out.printf("%10s %10s", "User ID", "User Name");
@@ -78,6 +86,21 @@ public class ConsoleService {
                 senderName = userService.getUsernameByAccountId(transfer.getAccountToId());
                 System.out.printf("%5s %15s %10s\n", transfer.getTransferId(), "To: " + senderName, "$" + transfer.getAmount());
             }
+        }
+    }
+
+    //TODO: print only pending transfers
+    public void printPendingTransfers(List<Transfer> transfers, UserService userService, int currentUserAccountId) {
+
+        System.out.printf("%20s\n", "Pending Transfers");
+        System.out.println("-----------------------------------");
+        System.out.printf("%5s %12s %12s", "ID", "To", "Amount");
+        System.out.println();
+        System.out.println("-----------------------------------");
+
+        for (Transfer transfer : transfers) {
+            String senderName = userService.getUsernameByAccountId(transfer.getAccountToId());
+                System.out.printf("%5s %15s %10s\n", transfer.getTransferId(), senderName, "$" + transfer.getAmount());
         }
     }
 
@@ -145,7 +168,6 @@ public class ConsoleService {
             }
         }
     }
-
 
     public void pause() {
         System.out.println("\nPress Enter to continue...");

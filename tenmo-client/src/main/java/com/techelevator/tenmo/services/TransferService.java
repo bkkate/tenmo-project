@@ -65,6 +65,13 @@ public class TransferService {
         return transferList;
     }
 
+    public List<Transfer> viewPendingTransfers (int accountId) {
+        ResponseEntity<Transfer[]> transfers = restTemplate.exchange(API_BASE_URL + "transfer/" + accountId + "/pending", HttpMethod.GET,
+                                                                    makeAuthEntity(), Transfer[].class);
+        List<Transfer> transferList = Arrays.asList(transfers.getBody());
+        return transferList;
+    }
+
     private HttpEntity<Transfer> makeTransferEntity(Transfer transfer) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

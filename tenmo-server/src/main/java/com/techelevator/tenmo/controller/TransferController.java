@@ -34,8 +34,13 @@ public class TransferController {
         return transferDao.getTransfersByAccountId(accountId);
     }
 
-    // handles request to make a money request from another user
+    // handles request to view pending transfers by an account ID
+    @RequestMapping (path = "/{accountId}/pending")
+    public List<Transfer> viewPendingTransfers(@PathVariable int accountId) {
+        return transferDao.getPendingTransfers(accountId);
+    }
 
+    // handles request to make a money request from another user
     @RequestMapping(path="/request", method = RequestMethod.POST)
     public Transfer createTransferRequest(@RequestBody Transfer transfer) {
         return transferDao.requestMoney(transfer);
