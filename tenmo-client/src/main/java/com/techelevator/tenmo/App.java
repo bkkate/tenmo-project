@@ -161,7 +161,10 @@ public class App {
         consoleService.printApproveOrReject();
         int optionSelected = -1;
         while(optionSelected == -1) {
-            consoleService.promptForInt("Please choose an option: ");
+            optionSelected = consoleService.promptForInt("Please choose an option: ");
+            if (!(optionSelected == 0) && !(optionSelected == 1) && !(optionSelected == 2)) {
+                optionSelected = -1;
+            }
         }
 
         switch(optionSelected) {
@@ -176,14 +179,14 @@ public class App {
 		
 	}
 
-    //TODO: approve method
+    //TODO: approve method - maybe move to TransferService?
     private void approve() {
-
+        System.out.println("approve test");
     }
 
     //TODO: reject method
     private void reject() {
-
+        System.out.println("reject test");
     }
 
 
