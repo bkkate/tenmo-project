@@ -50,12 +50,22 @@ public class ConsoleService {
         System.out.println();
     }
 
-    public void printApproveOrReject() {
+    public int promptApproveOrReject() {
         System.out.println();
         System.out.println("1: Approve");
         System.out.println("2: Reject");
         System.out.println("0: Don't approve or reject. Exit");
         System.out.println("------------");
+
+        // make sure user puts in a valid input: 0, 1, or 2
+        int optionSelected = -1;
+        while(optionSelected == -1) {
+            optionSelected = promptForInt("Please choose an option: ");
+            if (!(optionSelected == 0) && !(optionSelected == 1) && !(optionSelected == 2)) {
+                optionSelected = -1;
+            }
+        }
+        return optionSelected;
     }
 
     public void printUsers(List<User> users) {
@@ -89,19 +99,27 @@ public class ConsoleService {
         }
     }
 
-    //TODO: print only pending transfers
-    public void printPendingTransfers(List<Transfer> transfers, UserService userService, int currentUserAccountId) {
+    //prints all pending transfers and returns true if current user is the receiver and false if user is the sender
+    public boolean printPendingTransfersAndVerifyReceiver(List<Transfer> transfers, UserService userService, int userAccountId) {
+        boolean userIsReceiver = false;
+        if (transfers.size() > 0) {
+            System.out.println("Pending Transfers");
+            System.out.println("-----------------------------------");
+            System.out.printf("%5s %8s %8s %8s", "ID", "From", "To", "Amount");
+            System.out.println();
+            System.out.println("-----------------------------------");
 
-        System.out.printf("%20s\n", "Pending Transfers");
-        System.out.println("-----------------------------------");
-        System.out.printf("%5s %12s %12s", "ID", "To", "Amount");
-        System.out.println();
-        System.out.println("-----------------------------------");
-
-        for (Transfer transfer : transfers) {
-            String senderName = userService.getUsernameByAccountId(transfer.getAccountToId());
-                System.out.printf("%5s %15s %10s\n", transfer.getTransferId(), senderName, "$" + transfer.getAmount());
+            for (Transfer transfer : transfers) {
+                String senderName = userService.getUsernameByAccountId(transfer.getAccountFromId());
+                String receiverName = userService.getUsernameByAccountId(transfer.getAccountToId());
+                if (transfer.getAccountToId() == userAccountId) userIsReceiver = true;
+                System.out.printf("%5s %8s %8s %8s\n", transfer.getTransferId(), senderName, receiverName, "$" + transfer.getAmount());
+            }
         }
+        else {
+            System.out.println("No pending transfers to date");
+        }
+        return userIsReceiver;
     }
 
     public void printTransferDetails(Transfer transfer, UserService userService) {

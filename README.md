@@ -1,17 +1,8 @@
-# TE Backend Capstone project
+# TEnmo Backend Capstone project
 TEnmo is an online payment service for transferring "TE bucks" between friends. This is a command-line application built with Java that uses RESTful API server, Spring MVC model, and PostgreSQL.
 
 ## Planned Features
 I am currently working on additional functionalities for practice and refactoring existing code.
-* (Authenticated) user will be able to **_request_** a transfer of a specific amount of TE Bucks from another registered user.
-    * Should be able to choose from a list of users to request TE Bucks from.
-    * Must not be allowed to request money from myself.
-    * can't request a zero or negative amount.
-    * A transfer includes the User IDs of the from and to users and the amount of TE Bucks.
-    * A Request Transfer has an initial status of *Pending*.
-    * No account balance changes until the request is approved.
-    * The transfer request should appear in both users' list of transfers (use case #5).
-* User will be able to see **_Pending_** transfers.
 * User will be able to either **_approve or reject_** a Request Transfer.
     * Can't "approve" a given Request Transfer for more TE Bucks than user has in the account.
     * The Request Transfer status is Approved if user approves, or Rejected if user rejects the request.
@@ -20,7 +11,6 @@ I am currently working on additional functionalities for practice and refactorin
     * If the transfer is rejected, no account balance changes.
     
 ## Use cases & Requirements (Up-to-date)
-
 As a user of the system, the user is able to:
 * Register with a username and password.
     * A new registered user starts with an initial balance of 1,000 TE Bucks.
@@ -30,18 +20,25 @@ As a user of the system, the user is able to:
 As an _authenticated_ user of the system, the user is able to: 
 * See Account Balance.
 * **_Send_** a transfer of a specific amount of TE Bucks to a registered user.
-
     * Choose from a list of users to send TE bucks to.
-    * Must not be allowed to send money to myself
-    * Can't send a zero/negative amount or more TE bucks that I have in the account
-    * A transfer indlcues the user IDs of the from and to users and the amount of TE bucks
+    * Must not be allowed to send money to myself.
+    * Can't send a zero/negative amount or more TE bucks that I have in the account.
+    * A transfer indlcues the user IDs of the from and to users and the amount of TE bucks.
     * The receiver's account balance is increased by the amount of the transfer.
     * The server's account balance is decreased by the amount of the transfer.
-    * A Sending Transfer has an initial status of *Approved*
-*  See transfers user has sent or received.
+    * A Sending Transfer has an initial status of *Approved*.
+* See transfers user has sent or received.
 * Retrieve the details of any transfer based upon the transfer ID.
-
-
+* **_Request_** a transfer of a specific amount of TE Bucks from another registered user.
+  * Should be able to choose from a list of users to request TE Bucks from.
+  * Must not be allowed to request money from myself.
+  * can't request a zero or negative amount.
+  * A transfer includes the User IDs of the from and to users and the amount of TE Bucks.
+  * A Request Transfer has an initial status of *Pending*.
+  * No account balance changes until the request is approved.
+  * The transfer request should appear in both users' list of transfers (use case #5).
+* User will be able to see **_Pending_** transfers.
+  
 
 ## Sample screens
 

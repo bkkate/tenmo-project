@@ -85,4 +85,14 @@ public class TransferService {
         return new HttpEntity<>(headers);
     }
 
+    // approve pending transfer
+    public void approve() {
+
+    }
+
+    // reject pending transfer
+    public void reject() {
+
+    }
+
 }

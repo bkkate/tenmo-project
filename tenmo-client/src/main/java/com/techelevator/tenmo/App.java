@@ -153,41 +153,27 @@ public class App {
 
     }
 
-
 	private void viewPendingRequests() {
         List<Transfer> pendingTransfers = transferService.viewPendingTransfers(accountWithCurrentUserId.getAccountId());
-        consoleService.printPendingTransfers(pendingTransfers, userService,accountWithCurrentUserId.getAccountId());
+        boolean userIsReceiver = consoleService.printPendingTransfersAndVerifyReceiver(pendingTransfers, userService, accountWithCurrentUserId.getAccountId());
 
-        consoleService.printApproveOrReject();
-        int optionSelected = -1;
-        while(optionSelected == -1) {
-            optionSelected = consoleService.promptForInt("Please choose an option: ");
-            if (!(optionSelected == 0) && !(optionSelected == 1) && !(optionSelected == 2)) {
-                optionSelected = -1;
+       /* only give approve/reject action IF there are existing pending requests
+            OR the user is the sender
+        */
+        if (!userIsReceiver) {
+            // TODO: prompt for the transfer ID to approve/reject/exit
+            // make sure they choose a valid ID that matches & that they are the sender!
+
+            int optionSelected = consoleService.promptApproveOrReject();
+            switch(optionSelected) {
+                case 0: break;
+                case 1: transferService.approve();
+                    break;
+                case 2: transferService.reject();
+                    break;
             }
         }
-
-        switch(optionSelected) {
-            case 0: break;
-            case 1: approve();
-            break;
-            case 2: reject();
-            break;
-        }
-
-        //TODO (3/21): call the approve or reject method
-		
 	}
-
-    //TODO: approve method - maybe move to TransferService?
-    private void approve() {
-        System.out.println("approve test");
-    }
-
-    //TODO: reject method
-    private void reject() {
-        System.out.println("reject test");
-    }
 
 
     //TODO give an exit option to return to main menu
@@ -253,7 +239,6 @@ public class App {
         return userIdTo;
     }
 
-
     public BigDecimal verifySufficientFunds() {
         boolean validInput = false;
         BigDecimal amountToSend = new BigDecimal("0.00");
@@ -272,9 +257,6 @@ public class App {
         }
         return amountToSend;
     }
-
-
-
 
     private boolean userIdIsValid(List<User> users, int userIdTo) {
         boolean idIsValid = false;
